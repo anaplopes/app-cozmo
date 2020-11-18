@@ -36,7 +36,7 @@ class Motor:
         step_counter = 0
         count_motor = 0
 
-        while (GPIO.input(self.switch_down_pin) == 0 and side == -1) or (GPIO.input(self.switch_up_pin) == 0 and side == 1) :
+        while (GPIO.input(self.switch_down_pin) == 0 and side == -1) or (GPIO.input(self.switch_up_pin) == 0 and side == 1):
             for pin in range(0, 4):
                 xpin = step_pins[pin]
                 if self.seq[step_counter][pin]!=0:

@@ -2,7 +2,7 @@ import json
 import cozmo
 import requests
 from time import sleep
-from reward import reward
+from reward import reward_run
 from animate import Animate
 
 
@@ -13,11 +13,15 @@ def cozmo_run(robot, content=None):
 
     if robot.is_ready:
         if not robot.has_in_progress_actions:
+            if robot.is_on_charger:
+                robot.drive_off_charger_contacts().wait_for_completed()
+
+            print("Count: %s" % count)
             if content:
-                reward(robot, position=content['posicao'])
+                reward_run(robot, position=content['posicao'])
                 count = 0
             else:
-                if count == 0:
+                if count == 90:
                     Animate().anim_run(robot)
                     count = 0
                 else:
@@ -36,11 +40,11 @@ def cozmo_ready(robot: cozmo.robot.Robot):
 
                     content = {
                         'terminal': '012345',
-                        'posicao': 2
+                        'posicao': 1
                     }
                     
                     sleep(10)
-                    cozmo_run(robot)
+                    cozmo_run(robot, content)
 
                 else:
                     cozmo_run(robot)
@@ -52,7 +56,7 @@ def cozmo_ready(robot: cozmo.robot.Robot):
             cozmo_run(robot)
         except requests.exceptions.RequestException:
             cozmo_run(robot)
-        
+
         sleep(10)
 
 
