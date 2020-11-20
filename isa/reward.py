@@ -92,7 +92,7 @@ def reward_run(robot, position=0):
         if not robot.is_lift_in_pos > 45:
             robot.move_lift(-5)
         
-        pygame.mixer.music.load(f'./isa/audio/message/{sound}.mp3')
+        pygame.mixer.music.load(f'./isa/audio/goal/{sound}.mp3')
         pygame.mixer.music.play()
 
         get_the_candy(robot)

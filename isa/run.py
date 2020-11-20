@@ -21,7 +21,7 @@ def cozmo_run(robot, content=None):
                 reward_run(robot, position=content['posicao'])
                 count = 0
             else:
-                if count == 0:
+                if count == 90:
                     anim = Animate()
                     anim.anim_run(robot)
                     count = 0
@@ -46,7 +46,7 @@ def cozmo_ready(robot: cozmo.robot.Robot):
                     }
                     
                     sleep(10)
-                    cozmo_run(robot)
+                    cozmo_run(robot, content)
 
                 else:
                     cozmo_run(robot)
