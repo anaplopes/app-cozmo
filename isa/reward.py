@@ -1,4 +1,5 @@
 import cozmo
+import pygame
 import random
 from math import ceil
 from time import sleep
@@ -10,22 +11,25 @@ from cozmo.util import degrees, distance_mm, speed_mmps
 def handle_object(robot):
     ''' visualizando a imagem ? '''
 
-    View().view_run(robot)
+    vw = View()
+    vw.view_run(robot)
     sleep(2)
-    print("Esta vendo" if View().view_object_status() else "Nao esta vendo")
-    return View().view_object_status()
+    print("Esta vendo" if vw.view_object_status() else "Nao esta vendo")
+    return vw.view_object_status()
 
 
 def get_the_candy(robot):
     ''' pegar o bombom '''
     
     robot.drive_straight(distance_mm(1000), speed_mmps(100)).wait_for_completed()
-    #Motor().motor_run()
+    mt = Motor()
+    mt.motor_run()
     
     while True:
         if not handle_object(robot):
             break
         else:
+            mt.motor_run()
             sleep(2)
 
     robot.move_lift(1)
@@ -76,6 +80,7 @@ def back_to_base(robot, distance, side):
 
 def reward_run(robot, position=0):
 
+    sound = random.randint(0, 3)
     distance = 500 * (ceil(position / 2))
     side = 1 if position % 2 == 0 else -1
 
@@ -87,6 +92,9 @@ def reward_run(robot, position=0):
         if not robot.is_lift_in_pos > 45:
             robot.move_lift(-5)
         
+        pygame.mixer.music.load(f'./isa/audio/message/{sound}.mp3')
+        pygame.mixer.music.play()
+
         get_the_candy(robot)
         deliver_the_candy(robot, distance, side)
         valid_got_the_candy(robot, side)

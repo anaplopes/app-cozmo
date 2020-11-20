@@ -1,137 +1,225 @@
+import cozmo
+import pygame
 import random
-from cozmo.util import degrees, distance_mm, speed_mmps
+from time import sleep
 from cozmo.anim import Triggers
+from cozmo.util import degrees, distance_mm, speed_mmps
 
+
+pygame.mixer.init()
 
 class Animate:
     
-    # Muito animado, mas muda muito sua posição
-    def anim_speedtap_wingame_intensity02_01(self, robot):
-        print("anim_speedtap_wingame_intensity02_01")
-        robot.play_anim(name="anim_speedtap_wingame_intensity02_01").wait_for_completed()
+    def procedure_01(self, robot, sound):
+        ''' Relógio de espera | tédio '''
 
-    # Entediado e mostra o "joguinho", mas muda a angulação
-    def anim_bored_event_03(self, robot):
-        print("anim_bored_event_03")
-        robot.play_anim(name="anim_bored_event_03").wait_for_completed()
-
-    # Sentimento de perda, mas vira
-    def CubePounceLoseSession(self, robot):
-        print("CubePounceLoseSession")
-        robot.play_anim_trigger(cozmo.anim.Triggers.CubePounceLoseSession).wait_for_completed()
-
-    # Dança e movimento - Mas move bastante de posição
-    def OnSpeedtapGameCozmoWinHighIntensity(self, robot):
-        print("OnSpeedtapGameCozmoWinHighIntensity")
-        robot.play_anim_trigger(cozmo.anim.Triggers.OnSpeedtapGameCozmoWinHighIntensity).wait_for_completed()
-
-    # Fica um pouco bravo, chacoalha os braços e se move de posição
-    def OnSpeedtapGamePlayerWinHighIntensity(self, robot): # Este fica batendo um pouco aos lados
-        print("OnSpeedtapGamePlayerWinHighIntensity")
-        robot.play_anim_trigger(cozmo.anim.Triggers.OnSpeedtapGamePlayerWinHighIntensity).wait_for_completed()
-
-    # Imita um gato
-    def anim_petdetection_cat_01(self, robot):
-        print("anim_petdetection_cat_01")
-        robot.play_anim(name="anim_petdetection_cat_01").wait_for_completed()
-        
-    # Imita um cachorro
-    def anim_petdetection_dog_03(self, robot):
-        print("anim_petdetection_dog_03")
-        robot.play_anim(name="anim_petdetection_dog_03").wait_for_completed()
-
-    # Entediado, sem ação
-    def anim_bored_01(self, robot):
-        print("anim_bored_01")
-        robot.play_anim(name="anim_bored_01").wait_for_completed()
-    
-    # Parece estar esperando uma ação
-    def anim_poked_giggle(self, robot):
-        print("anim_poked_giggle")
-        robot.play_anim(name="anim_poked_giggle").wait_for_completed()
-
-    # Ataque de sucesso
-    def anim_pounce_success_02(self, robot):
-        print("anim_pounce_success_02")
-        robot.play_anim(name="anim_pounce_success_02").wait_for_completed()
-
-    # Relógio de espera | tédio
-    def anim_bored_event_02(self, robot):
-        print("anim_bored_event_02")
+        pygame.mixer.music.load(f'./isa/audio/message/{sound}.mp3')
+        pygame.mixer.music.play()
+        robot.drive_straight(distance_mm(300), speed_mmps(100)).wait_for_completed()
         robot.play_anim(name="anim_bored_event_02").wait_for_completed()
+        robot.drive_straight(distance_mm(300), speed_mmps(100)).wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.turn_in_place(degrees(360)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(300), speed_mmps(100)).wait_for_completed()
+        robot.play_anim(name="anim_bored_event_02").wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(360)).wait_for_completed()
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.drive_straight(distance_mm(500), speed_mmps(100)).wait_for_completed()
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(-100), speed_mmps(100)).wait_for_completed()
 
-    # Face não identificada
-    def anim_reacttoface_unidentified_02(self, robot):
-        print("anim_reacttoface_unidentified_02")
-        robot.play_anim(name="anim_reacttoface_unidentified_02").wait_for_completed()
 
-    # Fica surpreso e levanta o rostoanim_pounce_success_02
-    def anim_upgrade_reaction_lift_01(self, robot):
-        print("anim_upgrade_reaction_lift_01")
-        robot.play_anim(name="anim_upgrade_reaction_lift_01").wait_for_completed()
+    def procedure_02(self, robot, sound):
+        ''' Ataque de sucesso '''
 
-    # Após falha, ele fica esperando 
-    def KnockOverFailure(self, robot):
-        print("KnockOverFailure")
-        robot.play_anim_trigger(cozmo.anim.Triggers.KnockOverFailure).wait_for_completed()
+        pygame.mixer.music.load(f'./isa/audio/message/{sound}.mp3')
+        pygame.mixer.music.play()
+        robot.drive_straight(distance_mm(600), speed_mmps(100)).wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(300), speed_mmps(100)).wait_for_completed()
+        robot.play_anim(name="anim_pounce_success_02").wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(600), speed_mmps(100)).wait_for_completed()
+        robot.play_anim(name="anim_pounce_success_02").wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.drive_straight(distance_mm(300), speed_mmps(100)).wait_for_completed()
+        robot.turn_in_place(degrees(360)).wait_for_completed()
+        robot.drive_straight(distance_mm(500), speed_mmps(100)).wait_for_completed()
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(-100), speed_mmps(100)).wait_for_completed()
 
-    # Ânimo com os braços pra baixo
-    def FailedToRightFromFace(self, robot):
-        print("FailedToRightFromFace")
-        robot.play_anim_trigger(cozmo.anim.Triggers.FailedToRightFromFace).wait_for_completed()
 
-    # Reação um pouco neutra
-    def ReactToBlockPickupSuccess(self, robot):
-        print("ReactToBlockPickupSuccess")
-        robot.play_anim_trigger(cozmo.anim.Triggers.ReactToBlockPickupSuccess).wait_for_completed()
+    def procedure_03(self, robot, sound):
+        ''' levanta o braço e espera '''
 
-    # Dança do sucesso - Levanta os braços e anda um pouco
-    def BuildPyramidSuccess(self, robot):
-        print("BuildPyramidSuccess")
-        robot.drive_straight(distance_mm(200), speed_mmps(100)).wait_for_completed()
-        robot.play_anim_trigger(cozmo.anim.Triggers.BuildPyramidSuccess).wait_for_completed()
-        # robot.drive_straight(distance_mm(200), speed_mmps(100)).wait_for_completed()
-
-    # Levanta os braços e espera por algum objeto sobre ele
-    def OnSpeedtapHandCozmoWin(self, robot):
-        print("OnSpeedtapHandCozmoWin")
-        robot.play_anim_trigger(cozmo.anim.Triggers.OnSpeedtapHandCozmoWin).wait_for_completed()
-
-    # Levanta os braços e espera por algum objeto sobre ele
-    def OnSpeedtapHandPlayerWin(self, robot):
-        print("OnSpeedtapHandPlayerWin")
-        robot.play_anim_trigger(cozmo.anim.Triggers.OnSpeedtapHandPlayerWin).wait_for_completed()
-
-    # Fica esperando com o braço levantado
-    def OnSpeedtapTap(self, robot):
-        print("OnSpeedtapTap")
+        pygame.mixer.music.load(f'./isa/audio/message/{sound}.mp3')
+        pygame.mixer.music.play()
+        robot.drive_straight(distance_mm(300), speed_mmps(100)).wait_for_completed()
         robot.play_anim_trigger(cozmo.anim.Triggers.OnSpeedtapTap).wait_for_completed()
-
-    # Fica esperando com o braço levantado
-    def OnSpeedtapFakeout(self, robot):
-        print("OnSpeedtapFakeout")
-        robot.play_anim_trigger(cozmo.anim.Triggers.OnSpeedtapFakeout).wait_for_completed()
-
-    # Fica esperando com o braço levantado
-    def OnSpeedtapIdle(self, robot):
-        print("OnSpeedtapIdle")
-        robot.play_anim_trigger(cozmo.anim.Triggers.OnSpeedtapIdle).wait_for_completed()
-
-    # Irritado
-    def NamedFaceInitialGreeting(self, robot):
-        print("NamedFaceInitialGreeting")
-        robot.play_anim_trigger(cozmo.anim.Triggers.NamedFaceInitialGreeting).wait_for_completed()
-
-    # Ação suscinta de surpresa
-    def HikingInterestingEdgeThought(self, robot):
-        print("HikingInterestingEdgeThought")
-        robot.play_anim_trigger(cozmo.anim.Triggers.HikingInterestingEdgeThought).wait_for_completed()
-        
-    # Esperando algo com ansiedade
-    def CubePouncePounceNormal(self, robot):
-        print("CubePouncePounceNormal")
+        robot.drive_straight(distance_mm(300), speed_mmps(100)).wait_for_completed()
+        robot.drive_straight(distance_mm(300), speed_mmps(100)).wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(360)).wait_for_completed()
+        robot.turn_in_place(degrees(180)).wait_for_completed()
         robot.play_anim_trigger(cozmo.anim.Triggers.CubePouncePounceNormal).wait_for_completed()
+        robot.play_anim(name="anim_bored_01").wait_for_completed()
+        robot.drive_straight(distance_mm(800), speed_mmps(100)).wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(-100), speed_mmps(100)).wait_for_completed()
+
+
+    def procedure_04(self, robot, sound):
+        ''' Ataque de sucesso, cachorrinho '''
+        
+        pygame.mixer.music.load(f'./isa/audio/message/{sound}.mp3')
+        pygame.mixer.music.play()
+        robot.drive_straight(distance_mm(600), speed_mmps(100)).wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(360)).wait_for_completed()
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(300), speed_mmps(100)).wait_for_completed()
+        robot.play_anim(name="anim_pounce_success_02").wait_for_completed()
+        robot.play_anim(name="anim_petdetection_dog_03").wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(600), speed_mmps(100)).wait_for_completed()
+        robot.play_anim(name="anim_pounce_success_02").wait_for_completed()
+        robot.play_anim(name="anim_petdetection_dog_03").wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(900), speed_mmps(100)).wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(-100), speed_mmps(100)).wait_for_completed()
+
+
+    def procedure_05(self, robot, sound):
+        ''' gatinho '''
+
+        pygame.mixer.music.load(f'./isa/audio/message/{sound}.mp3')
+        pygame.mixer.music.play()
+        robot.drive_straight(distance_mm(300), speed_mmps(100)).wait_for_completed()
+        robot.play_anim(name="anim_petdetection_cat_01").wait_for_completed()
+        robot.drive_straight(distance_mm(300), speed_mmps(100)).wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.turn_in_place(degrees(360)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(300), speed_mmps(100)).wait_for_completed()
+        robot.play_anim(name="anim_petdetection_cat_01").wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(360)).wait_for_completed()
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(500), speed_mmps(100)).wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(-100), speed_mmps(100)).wait_for_completed()
+
+
+    def procedure_06(self, robot, sound):
+        ''' Ataque de sucesso, levanta o braço e espera '''
+
+        pygame.mixer.music.load(f'./isa/audio/message/{sound}.mp3')
+        pygame.mixer.music.play()
+        robot.drive_straight(distance_mm(600), speed_mmps(100)).wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(360)).wait_for_completed()
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(300), speed_mmps(100)).wait_for_completed()
+        robot.play_anim(name="anim_pounce_success_02").wait_for_completed()
+        robot.play_anim_trigger(cozmo.anim.Triggers.OnSpeedtapTap).wait_for_completed()
+        robot.drive_straight(distance_mm(600), speed_mmps(100)).wait_for_completed()
+        robot.play_anim(name="anim_pounce_success_02").wait_for_completed()
+        robot.play_anim_trigger(cozmo.anim.Triggers.OnSpeedtapTap).wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.drive_straight(distance_mm(800), speed_mmps(100)).wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(-100), speed_mmps(100)).wait_for_completed()
+
+
+    def procedure_07(self, robot, sound):
+        ''' , Ataque de sucesso '''
+
+        pygame.mixer.music.load(f'./isa/audio/message/{sound}.mp3')
+        pygame.mixer.music.play()
+        robot.drive_straight(distance_mm(600), speed_mmps(100)).wait_for_completed()
+        robot.play_anim(name="anim_bored_event_03").wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.drive_straight(distance_mm(300), speed_mmps(100)).wait_for_completed()
+        robot.play_anim(name="anim_pounce_success_02").wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.drive_straight(distance_mm(600), speed_mmps(100)).wait_for_completed()
+        robot.play_anim(name="anim_bored_event_03").wait_for_completed()
+        robot.drive_straight(distance_mm(200), speed_mmps(100)).wait_for_completed()
+        robot.play_anim(name="anim_pounce_success_02").wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(180)).wait_for_completed()
+        robot.drive_straight(distance_mm(1000), speed_mmps(100)).wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.turn_in_place(degrees(90)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(-100), speed_mmps(100)).wait_for_completed()
+
 
     def anim_run(self, robot):
-        trigger = [self.FailedToRightFromFace]
-        trigger[0](robot)
+        
+        trigger = [self.procedure_01, self.procedure_02, self.procedure_03, self.procedure_04, self.procedure_05, self.procedure_06, self.procedure_07]
+        msn = random.randint(0, 20)
+        anim = random.randint(0, 6)
+        
+        print(f"animate: {anim}, message: {msn}")
+        trigger[anim](robot, msn)
