@@ -42,7 +42,6 @@ def cozmo_ready(robot: cozmo.robot.Robot):
                     content = {
                         'terminal': '012345',
                         'posicao': 1
-                    
                     }
                     
                     sleep(10)

@@ -2,6 +2,7 @@ import cozmo
 import pygame
 import random
 from time import sleep
+from sensor import Sensor
 from cozmo.anim import Triggers
 from cozmo.util import degrees, distance_mm, speed_mmps
 
@@ -9,6 +10,28 @@ from cozmo.util import degrees, distance_mm, speed_mmps
 pygame.mixer.init()
 
 class Animate:
+
+    def procedure_00(self, robot, sound):
+        ''' padrão '''
+        sn = Sensor()
+        pygame.mixer.music.load(f'./isa/audio/message/{sound}.mp3')
+        pygame.mixer.music.play()
+        robot.drive_straight(distance_mm(2850), speed_mmps(220)).wait_for_completed()
+        while sn.notComplete('machine'):
+            robot.drive_straight(distance_mm(20), speed_mmps(100)).wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(180), False, 0, degrees(30)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(2700), speed_mmps(220)).wait_for_completed()
+        while sn.notComplete('base'):
+            robot.drive_straight(distance_mm(20), speed_mmps(100)).wait_for_completed()
+        robot.move_lift(1)
+        sleep(2)
+        robot.turn_in_place(degrees(180), False, 0, degrees(30)).wait_for_completed()
+        robot.move_lift(-1)
+        robot.drive_straight(distance_mm(-150), speed_mmps(220)).wait_for_completed()
+
     
     def procedure_01(self, robot, sound):
         ''' Relógio de espera | tédio '''
@@ -217,9 +240,7 @@ class Animate:
 
     def anim_run(self, robot):
         
-        trigger = [self.procedure_01, self.procedure_02, self.procedure_03, self.procedure_04, self.procedure_05, self.procedure_06, self.procedure_07]
+        trigger = [self.procedure_00]
         msn = random.randint(0, 20)
-        anim = random.randint(0, 6)
         
-        print(f"animate: {anim}, message: {msn}")
-        trigger[anim](robot, msn)
+        trigger[0](robot, msn)

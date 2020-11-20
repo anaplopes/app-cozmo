@@ -6,7 +6,7 @@ import RPi.GPIO as GPIO
 class Motor:
     
     def __init__(self):
-
+        GPIO.setwarnings = False
         GPIO.setmode(GPIO.BCM)
         self.step_pins = [21,20,16,12]
 
