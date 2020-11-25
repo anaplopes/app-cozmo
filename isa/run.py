@@ -2,13 +2,14 @@ import json
 import cozmo
 import requests
 from time import sleep
-from reward import reward_run
 from animate import Animate
+from datetime import datetime
+from reward import reward_run
 
 
 count = 0
 
-def cozmo_run(robot, content=None):
+def cozmo_run(robot, position=None, deliver=None):
     global count
 
     if robot.is_ready:
@@ -17,8 +18,8 @@ def cozmo_run(robot, content=None):
                 robot.drive_off_charger_contacts().wait_for_completed()
 
             print("Count: %s" % count)
-            if content:
-                reward_run(robot, position=content['posicao'])
+            if position:
+                reward_run(robot, position=position, deliver=deliver)
                 count = 0
             else:
                 if count == 90:
@@ -30,32 +31,69 @@ def cozmo_run(robot, content=None):
 
 
 def cozmo_ready(robot: cozmo.robot.Robot):
+
+    url_log = "http://ec2-54-152-248-85.compute-1.amazonaws.com:3033/api/log"
+    log = {
+        'type': 'error',
+        'text': None,
+        'datetime': datetime.now()
+    }
+
     while True:
         try:
-            response = requests.get("http://ec2-54-152-248-85.compute-1.amazonaws.com:3033/api/rating?terminal=1", timeout=8)
+            resp_deliver = requests.get("http://ec2-54-152-248-85.compute-1.amazonaws.com:3033/api/pride", timeout=8)
 
-            try:
-                if response.status_code == 200:
-                    content = json.loads(response.content)
-                    print(content)
+            if resp_deliver.status_code == 200:
+                deliver = json.loads(resp_deliver.content)
 
-                    content = {
-                        'terminal': '012345',
-                        'posicao': 1
-                    }
-                    
-                    sleep(10)
-                    cozmo_run(robot, content)
+                try:
+                    resp_pos = requests.get(f"http://ec2-54-152-248-85.compute-1.amazonaws.com:3033/api/position?sigla={deliver['sigla']}", timeout=8)
 
-                else:
+                    if resp_pos.status_code == 200:
+                        position = json.loads(resp_pos.content)
+                        
+                        sleep(10)
+                        cozmo_run(robot, position['position'], deliver)
+
+                    else:
+                        cozmo_run(robot)
+
+                
+                except ValueError:
+                    log['text'] = 'get position: Value Error'
+                    requests.post(url_log, data=json.dumps(log))
                     cozmo_run(robot)
-            except ValueError:
+                except requests.exceptions.Timeout:
+                    log['text'] = 'get position: Timeout'
+                    requests.post(url_log, data=json.dumps(log))
+                    cozmo_run(robot)
+                except requests.exceptions.TooManyRedirects:
+                    log['text'] = 'get position: Too Many Redirects'
+                    requests.post(url_log, data=json.dumps(log))
+                    cozmo_run(robot)
+                except requests.exceptions.RequestException:
+                    log['text'] = 'get position: Request Exception'
+                    requests.post(url_log, data=json.dumps(log))
+                    cozmo_run(robot)
+                        
+            else:
                 cozmo_run(robot)
+
+        except ValueError:
+            log['text'] = 'get goal: Value Error'
+            requests.post(url_log, data=json.dumps(log))
+            cozmo_run(robot)
         except requests.exceptions.Timeout:
+            log['text'] = 'get goal: Timeout'
+            requests.post(url_log, data=json.dumps(log))
             cozmo_run(robot)
         except requests.exceptions.TooManyRedirects:
+            log['text'] = 'get goal: Too Many Redirects'
+            requests.post(url_log, data=json.dumps(log))
             cozmo_run(robot)
         except requests.exceptions.RequestException:
+            log['text'] = 'get goal: Request Exception'
+            requests.post(url_log, data=json.dumps(log))
             cozmo_run(robot)
 
         sleep(10)
