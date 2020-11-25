@@ -18,7 +18,7 @@ url_log = "http://ec2-54-152-248-85.compute-1.amazonaws.com:3033/api/log"
 log = {
     'type': 'warning',
     'text': None,
-    'datetime': datetime.now()
+    'datetime': datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f%z")
 }
 
 def handle_object(robot):
@@ -39,11 +39,13 @@ def get_the_candy(robot):
     
     global log
 
-    robot.drive_straight(distance_mm(2850), speed_mmps(220)).wait_for_completed()
+    robot.drive_straight(distance_mm(5000), speed_mmps(220)).wait_for_completed()
+    robot.drive_straight(distance_mm(4800), speed_mmps(220)).wait_for_completed()
 
     sn = Sensor()
     while sn.notComplete('machine'):
         log['text'] = "get_the_candy: nao chegou no sensor"
+        print(log)
         requests.post(url_log, data=json.dumps(log))
         robot.drive_straight(distance_mm(20), speed_mmps(100)).wait_for_completed()
 
@@ -88,6 +90,7 @@ def valid_got_the_candy(robot, side, deliver):
             log['text'] = "valid_got_the_candy: pegou o bombom"
             requests.post(url_log, data=json.dumps(log))
 
+            '''
             try:
                 deliver.update({'received': 1})
                 requests.post("http://ec2-54-152-248-85.compute-1.amazonaws.com:3033/api/pride", data=json.dumps(deliver))
@@ -103,6 +106,7 @@ def valid_got_the_candy(robot, side, deliver):
                 log['type'] = 'error'
                 log['text'] = 'post pride: Request Exception'
                 requests.post(url_log, data=json.dumps(log))
+            '''
             
             robot.move_lift(1)
             sleep(2)
@@ -140,8 +144,11 @@ def reward_run(robot, position, deliver):
     ''' centralizador do processo '''
 
     sound = random.randint(0, 3)
-    distance = 450 * (ceil(position / 2))
     side = 1 if position % 2 == 0 else -1
+
+    if position >= 2:
+        distance = 400
+    distance = (1000 * ((ceil(position / 2)) -1)) + 400
 
     if not robot.is_lift_in_pos > 45:
         robot.move_lift(-5)

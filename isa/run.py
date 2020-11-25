@@ -45,12 +45,14 @@ def cozmo_ready(robot: cozmo.robot.Robot):
 
             if resp_deliver.status_code == 200:
                 deliver = json.loads(resp_deliver.content)
+                print(deliver)
 
                 try:
                     resp_pos = requests.get(f"http://ec2-54-152-248-85.compute-1.amazonaws.com:3033/api/position?sigla={deliver['sigla']}", timeout=8)
 
                     if resp_pos.status_code == 200:
                         position = json.loads(resp_pos.content)
+                        print(position)
                         
                         sleep(10)
                         cozmo_run(robot, position['position'], deliver)
